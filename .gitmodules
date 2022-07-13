@@ -1,0 +1,12 @@
+[submodule "FastLZ"]
+	path = FastLZ
+	url = git@github.com:ka5p3rr/FastLZ.git
+[submodule "snappy-c"]
+	path = snappy-c
+	url = git@github.com:ka5p3rr/snappy-c.git
+[submodule "zip"]
+	path = zip
+	url = git@github.com:kuba--/zip.git
+[submodule "zlib"]
+	path = zlib
+	url = git@github.com:madler/zlib.git
