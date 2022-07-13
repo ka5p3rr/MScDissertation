@@ -1,2 +1,2 @@
-# MSc Dissertation
-# MScDissertation
+# MSc Dissertation at the University of Edinburgh
+
