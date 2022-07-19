@@ -66,8 +66,13 @@
 
 ## ImageMagick
 
-- Configure with build flag
-  - `./configure --build=aarch64-unknown-freebsd14.0`
-    - Configure provides a large number of flags to build
-  - `env LD_LIBRARY_PATH=/path/to/ImageMagick/lib/directory:/path/to/ImageMagick/lib/some-other-directory:/usr/local/lib:/usr/lib:/lib /path/to/ImageMagick/executable`
+To configure running for the unrecognised CheriBSD, which is based on FreeBSD:
+
+```bash
+./configure --build=aarch64-unknown-freebsd14.0
+```
+
+Other flags can also be provided to run the building script.
+
+- `env LD_LIBRARY_PATH=/path/to/ImageMagick/lib/directory:/path/to/ImageMagick/lib/some-other-directory:/usr/local/lib:/usr/lib:/lib /path/to/ImageMagick/executable`
 - [ImageMagick](https://imagemagick.org/), [ImageMagick on GitHub](https://github.com/ImageMagick/ImageMagick)
