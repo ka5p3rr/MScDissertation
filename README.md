@@ -4,13 +4,13 @@
 
 - [Compression](#compression)
   - [snappy-c](#snappy-c)
+  - [zip](#zip)
   - [FastLZ](#fastlz)
   - [QuickLZ](#quicklz)
   - [liblzf](#liblzf)
   - [lzbench](#lzbench)
   - [minilzo](#minilzo)
   - [miniz](#miniz)
-  - [zip](#zip)
   - [zlib](#zlib)
 - [ImageMagick](#imagemagick)
 
@@ -23,34 +23,6 @@
 - Running on Morello provides runtime safety, for example providing wrongly sized buffers results in a runtime error
 - Running verify (their testing file) shows no issues, written short bash script to handle running on compression-corpus
 - [snappy-c on GitHub](https://github.com/andikleen/snappy-c), [snappy-c fork](https://github.com/ka5p3rr/snappy-c), [snappy-c API](http://halobates.de/snappy.html), [Main project website](https://github.com/google/snappy), [snappy on GitHub](https://github.com/google/snappy)
-
-### FastLZ
-
-- Found a bug, Ruize found a fix, which makes all the tests pass. A buffer overflow caused a `In-address space security exception (core dumped)`.
-- Code alteration can be found in the submodule, which is a fork of the original repository. Bug fix included and added `defined(__aarch64__) || defined(_M_ARM64)` to recognise ARM as a 64-bit system.
-- [FastLZ](https://github.com/ariya/FastLZ), [FastLZ fork](https://github.com/ka5p3rr/FastLZ)
-
-### QuickLZ
-
-- Seems to cause a memory fault
-- [QuickLZ fork](https://github.com/ka5p3rr/QuickLZ)
-
-### liblzf
-
-### lzbench
-
-- [lzbench](https://github.com/inikep/lzbench)
-
-### minilzo
-
-- Minilzo is a subset of the lzo library intended to be included in other projects
-- Can't build it, missing defined variable names
-- [minilzo](https://github.com/yuhaoth/minilzo), [lzo](http://www.oberhumer.com/opensource/lzo/), [project include](https://www.gnu.org/software/grub/manual/grub-dev/html_node/minilzo.html)
-
-### miniz
-
-- Having a hard time running the build script
-- [miniz](https://github.com/richgel999/miniz)
 
 ### zip
 
@@ -89,6 +61,34 @@ gmake: *** [Makefile:74: test] Error 8
 Running the failing test individually results in a `In-address space security exception (core dumped)` error. Caused by a flipped `&&` condition of an array index. More detail provided in the issue link.
 
 - [zip](https://github.com/kuba--/zip), "This is done by hacking awesome [miniz](https://github.com/richgel999/miniz) library and layering functions on top of the miniz v2.2.0 API."
+
+### FastLZ
+
+- Found a bug, Ruize found a fix, which makes all the tests pass. A buffer overflow caused a `In-address space security exception (core dumped)`.
+- Code alteration can be found in the submodule, which is a fork of the original repository. Bug fix included and added `defined(__aarch64__) || defined(_M_ARM64)` to recognise ARM as a 64-bit system.
+- [FastLZ](https://github.com/ariya/FastLZ), [FastLZ fork](https://github.com/ka5p3rr/FastLZ)
+
+### QuickLZ
+
+- Seems to cause a memory fault
+- [QuickLZ fork](https://github.com/ka5p3rr/QuickLZ)
+
+### liblzf
+
+### lzbench
+
+- [lzbench](https://github.com/inikep/lzbench)
+
+### minilzo
+
+- Minilzo is a subset of the lzo library intended to be included in other projects
+- Can't build it, missing defined variable names
+- [minilzo](https://github.com/yuhaoth/minilzo), [lzo](http://www.oberhumer.com/opensource/lzo/), [project include](https://www.gnu.org/software/grub/manual/grub-dev/html_node/minilzo.html)
+
+### miniz
+
+- Having a hard time running the build script
+- [miniz](https://github.com/richgel999/miniz)
 
 ### zlib
 
