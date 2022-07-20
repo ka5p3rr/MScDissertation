@@ -6,12 +6,12 @@
   - [snappy-c](#snappy-c)
   - [zip](#zip)
   - [FastLZ](#fastlz)
+  - [zlib](#zlib)
   - [QuickLZ](#quicklz)
-  - [liblzf](#liblzf)
   - [lzbench](#lzbench)
   - [minilzo](#minilzo)
   - [miniz](#miniz)
-  - [zlib](#zlib)
+  - [liblzf](#liblzf)
 - [ImageMagick](#imagemagick)
 
 ## Compression
@@ -68,15 +68,19 @@ Running the failing test individually results in a `In-address space security ex
 - Code alteration can be found in the submodule, which is a fork of the original repository. Bug fix included and added `defined(__aarch64__) || defined(_M_ARM64)` to recognise ARM as a 64-bit system.
 - [FastLZ](https://github.com/ariya/FastLZ), [FastLZ fork](https://github.com/ka5p3rr/FastLZ)
 
+### zlib
+
+- Compiles with no issues, all tests pass
+- [Main project website](http://zlib.net/), [zlib on GitHub](https://github.com/madler/zlib)
+
 ### QuickLZ
 
-- Seems to cause a memory fault
+- Seems to cause a memory fault `In-address space security exception (core dumped)`
 - [QuickLZ fork](https://github.com/ka5p3rr/QuickLZ)
-
-### liblzf
 
 ### lzbench
 
+- large compilation project pulling multiple compression libraries into one big repository
 - [lzbench](https://github.com/inikep/lzbench)
 
 ### minilzo
@@ -90,10 +94,7 @@ Running the failing test individually results in a `In-address space security ex
 - Having a hard time running the build script
 - [miniz](https://github.com/richgel999/miniz)
 
-### zlib
-
-- Compiles with no issues, all tests pass
-- [Main project website](http://zlib.net/), [zlib on GitHub](https://github.com/madler/zlib)
+### liblzf
 
 ## ImageMagick
 
