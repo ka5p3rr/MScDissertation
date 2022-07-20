@@ -106,24 +106,34 @@ Running the failing test individually results in a `In-address space security ex
 
 ### Running instructions
 
-To configure running for the unrecognised CheriBSD, which is based on FreeBSD, added a prefix instalation location and compile without X11 support:
+First run the configure script, which automatically sets up a building `Makefile` with the default installation location:
 
 ```bash
-$ ./configure --build=aarch64-unknown-freebsd14.0 --prefix=$HOME/imagemagick
+$ ./configure --build=aarch64-unknown-freebsd14.0
 ```
+
+The `--build=aarch64-unknown-freebsd14.0` flag is used to recognise the custom `aarch64c` achitecture.
+
+Optionally, if you later wish to install the tool set a custom install directory with the `--prefix=PREFIX` flag, e.g. `--prefix=$HOME/im` to install in the user home directory under `im`.
 
 Other flags can also be provided to run the building script. The building including feature toggles can be fully customised. To view all the options visit [Install from Source](https://imagemagick.org/script/install-source.php), [Advanced Linux Installation](https://imagemagick.org/script/advanced-linux-installation.php) or run `./configure -h`.
 
-In order to compile the source code on Morello run `gmake` inside the ImageMagick directory. To install the binaries run `gmake install`. Included tests can be run with `gmake check`. To remove all files produced by installation run `gmake uninstall`. In addition, `gmake clean` and `gmake distclean` are also available to remove files produced by compilation using `gmake` and running the `configure` script, respectively.
+In order to compile the source code on Morello run `gmake` inside the ImageMagick directory.
+
+Now the tool can be run by:
+
+```bash
+$ ./utilities/magick
+```
+
+The tool can be optionally install the binaries with `gmake install` either to the default `/usr/local` or the `--prefix=` defined directory. Included tests can be run with `gmake check`. To remove all files produced by installation run `gmake uninstall`. In addition, `gmake clean` and `gmake distclean` are also available to remove files produced by compilation using `gmake` and running the `configure` script, respectively.
 
 ### Issues
 
-Several compilation warnings show up during build:
-
-- `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced`
-- Do I need `--disable-docs`? It seems to build fine with it enabled
-- `--without-x` disable X11, seems to build fine with it
-- `-disable-installed` is it needed? seems to be disabled by providing `--prefix` anyway
+- Several compilation warnings show up during build: `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced`
+- `--disable-docs`? It seems to build fine with it
+- `--without-x` disable X11? It seems to build fine with it
+- `--disable-installed` is it needed? creates a distributable portable installation
 
 ### Notes and links
 
