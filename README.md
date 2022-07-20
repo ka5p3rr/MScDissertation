@@ -109,7 +109,7 @@ Running the failing test individually results in a `In-address space security ex
 To configure running for the unrecognised CheriBSD, which is based on FreeBSD, added a prefix instalation location and compile without X11 support:
 
 ```bash
-$ ./configure --build=aarch64-unknown-freebsd14.0 --prefix=$HOME/imagemagick --without-x
+$ ./configure --build=aarch64-unknown-freebsd14.0 --prefix=$HOME/imagemagick
 ```
 
 Other flags can also be provided to run the building script. The building including feature toggles can be fully customised. To view all the options visit [Install from Source](https://imagemagick.org/script/install-source.php), [Advanced Linux Installation](https://imagemagick.org/script/advanced-linux-installation.php) or run `./configure -h`.
@@ -120,9 +120,12 @@ In order to compile the source code on Morello run `gmake` inside the ImageMagic
 
 Several compilation warnings show up during build:
 
-1. `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced`
+- `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced`
+- Do I need `--disable-docs`? It seems to build fine with it enabled
+- `--without-x` disable X11, seems to build fine with it
+- `-disable-installed` is it needed? seems to be disabled by providing `--prefix` anyway
 
 ### Notes and links
 
 - `env LD_LIBRARY_PATH=/path/to/ImageMagick/lib/directory:/path/to/ImageMagick/lib/some-other-directory:/usr/local/lib:/usr/lib:/lib /path/to/ImageMagick/executable`
-- [ImageMagick](https://imagemagick.org/), [ImageMagick on GitHub](https://github.com/ImageMagick/ImageMagick), [Install from Source](https://imagemagick.org/script/install-source.php), [Advanced Linux Installation](https://imagemagick.org/script/advanced-linux-installation.php)
+- [ImageMagick](https://imagemagick.org/), [ImageMagick on GitHub](https://github.com/ImageMagick/ImageMagick)
