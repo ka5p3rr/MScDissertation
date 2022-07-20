@@ -84,6 +84,7 @@ Running the failing test individually results in a `In-address space security ex
 ### lzbench
 
 - large compilation project pulling multiple compression libraries into one big repository
+- Abandoned for now
 - [lzbench](https://github.com/inikep/lzbench)
 
 ### minilzo
@@ -94,13 +95,13 @@ Running the failing test individually results in a `In-address space security ex
 
 ### miniz
 
-- Having a hard time running the build script
+- Having a hard time running the build script, multiple failures caused by the linker
 - Abandoned for now
 - [miniz](https://github.com/richgel999/miniz)
 
 ### liblzf
 
-- Abanoned
+- Abandoned
 
 ## ImageMagick
 
