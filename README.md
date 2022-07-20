@@ -13,6 +13,9 @@
   - [miniz](#miniz)
   - [liblzf](#liblzf)
 - [ImageMagick](#imagemagick)
+  - [Running instructions](#running-instructions)
+  - [Issues](#issues)
+  - [Notes and links](#notes-and-links)
 
 ## Compression
 
@@ -58,7 +61,7 @@ Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.
 gmake: *** [Makefile:74: test] Error 8
 ```
 
-Running the failing test individually results in a `In-address space security exception (core dumped)` error. Caused by a flipped `&&` condition of an array index. More detail provided in the issue link.
+Running the failing test individually results in a `In-address space security exception (core dumped)` error. Caused by a flipped `&&` condition of an array index. More detail provided [here](https://github.com/kuba--/zip/issues/270).
 
 - [zip](https://github.com/kuba--/zip), "This is done by hacking awesome [miniz](https://github.com/richgel999/miniz) library and layering functions on top of the miniz v2.2.0 API."
 
@@ -92,19 +95,34 @@ Running the failing test individually results in a `In-address space security ex
 ### miniz
 
 - Having a hard time running the build script
+- Abandoned for now
 - [miniz](https://github.com/richgel999/miniz)
 
 ### liblzf
 
+- Abanoned
+
 ## ImageMagick
 
-To configure running for the unrecognised CheriBSD, which is based on FreeBSD:
+### Running instructions
+
+To configure running for the unrecognised CheriBSD, which is based on FreeBSD, added a prefix instalation location and compile without X11 support:
 
 ```bash
-./configure --build=aarch64-unknown-freebsd14.0
+$ ./configure --build=aarch64-unknown-freebsd14.0 --prefix=$HOME/imagemagick --without-x
 ```
 
-Other flags can also be provided to run the building script.
+Other flags can also be provided to run the building script. The building including feature toggles can be fully customised. To view all the options visit [Install from Source](https://imagemagick.org/script/install-source.php), [Advanced Linux Installation](https://imagemagick.org/script/advanced-linux-installation.php) or run `./configure -h`.
+
+In order to compile the source code on Morello run `gmake` inside the ImageMagick directory. To install the binaries run `gmake install`. Included tests can be run with `gmake check`. To remove all files produced by installation run `gmake uninstall`. In addition, `gmake clean` and `gmake distclean` are also available to remove files produced by compilation using `gmake` and running the `configure` script, respectively.
+
+### Issues
+
+Several compilation warnings show up during build:
+
+1. `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced`
+
+### Notes and links
 
 - `env LD_LIBRARY_PATH=/path/to/ImageMagick/lib/directory:/path/to/ImageMagick/lib/some-other-directory:/usr/local/lib:/usr/lib:/lib /path/to/ImageMagick/executable`
-- [ImageMagick](https://imagemagick.org/), [ImageMagick on GitHub](https://github.com/ImageMagick/ImageMagick)
+- [ImageMagick](https://imagemagick.org/), [ImageMagick on GitHub](https://github.com/ImageMagick/ImageMagick), [Install from Source](https://imagemagick.org/script/install-source.php), [Advanced Linux Installation](https://imagemagick.org/script/advanced-linux-installation.php)
