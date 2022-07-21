@@ -22,15 +22,14 @@
 ### snappy-c
 
 - Snappy-c is third-party implementation of the snappy algorithm providing C-language bindings
-- Compiles on Morello purecap without issues, build using gmake
-- Running on Morello provides runtime safety, for example providing wrongly sized buffers results in a runtime error
-- Running verify (their testing file) shows no issues, written short bash script to handle running on compression-corpus
+- Compiles on Morello purecap without issues, build using gmake. Resulting binaries are executable including a provided verifying script, command line interface and/or object files to be included in other projects.
+- Running on Morello provides runtime safety, for example providing wrongly sized buffers results in a runtime error. Similarly, testing unaligned sizes with provided buffers, uninitialised memory and similar. Question is whether the code should check for the missmatch or just fail on Morello? I assume on traditional architecture it will fail as well with an alternative error, but the code is then open to certain vulnerabilities, presumably.
+- Running verify (their testing file) shows no issues. I have written short bash script to handle running on compression-corpus, which contains several files of different formatting, file extensions and length to be tested.
 - [snappy-c on GitHub](https://github.com/andikleen/snappy-c), [snappy-c fork](https://github.com/ka5p3rr/snappy-c), [snappy-c API](http://halobates.de/snappy.html), [Main project website](https://github.com/google/snappy), [snappy on GitHub](https://github.com/google/snappy)
 
 ### zip
 
-- Library had a buffer overflow bug, which was discovered through their provided tests
-- Found a fix with Ruize: [issue](https://github.com/kuba--/zip/issues/270)
+- Library had a buffer overflow bug, which was discovered through their provided tests.
 
 ```bash
 Running tests...
@@ -61,7 +60,11 @@ Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.
 gmake: *** [Makefile:74: test] Error 8
 ```
 
-Running the failing test individually results in a `In-address space security exception (core dumped)` error. Caused by a flipped `&&` condition of an array index. More detail provided [here](https://github.com/kuba--/zip/issues/270).
+In summary, the code contained a check for an array index. The check is tested each loop iteration, but only after accessing the array already. Ultimately, resulting in buffer over-read of the last index, which is out of the bounds of the buffer.
+
+Running the failing test individually results in a `In-address space security exception (core dumped)` error, which are caused by a flipped `&&` condition of an array index. More detail is provided in the issue filed in the original repository description here [issue](https://github.com/kuba--/zip/issues/270).
+
+Ruize and I found the bug through different means, we updated each other on the issue and collaborated on finding a fix. The fix has now been upstreamed to the original repository. Testing the new release on Morello all tests now pass successfully.
 
 - [zip](https://github.com/kuba--/zip), "This is done by hacking awesome [miniz](https://github.com/richgel999/miniz) library and layering functions on top of the miniz v2.2.0 API."
 
@@ -117,6 +120,12 @@ The `--build=aarch64-unknown-freebsd14.0` flag is used to recognise the custom `
 
 Optionally, if you later wish to install the tool set a custom install directory with the `--prefix=PREFIX` flag, e.g. `--prefix=$HOME/im` to install in the user home directory under `im`.
 
+I run my configuration as:
+
+```bash
+$ ./configure --build=aarch64-unknown-freebsd14.0 --prefix=$HOME/im
+```
+
 Other flags can also be provided to run the building script. The building including feature toggles can be fully customised. To view all the options visit [Install from Source](https://imagemagick.org/script/install-source.php), [Advanced Linux Installation](https://imagemagick.org/script/advanced-linux-installation.php) or run `./configure -h`.
 
 In order to compile the source code on Morello run `gmake` inside the ImageMagick directory.
@@ -131,10 +140,11 @@ The tool can be optionally install the binaries with `gmake install` either to t
 
 ### Issues
 
-- Several compilation warnings show up during build: `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced`
-- `--disable-docs`? It seems to build fine with it
-- `--without-x` disable X11? It seems to build fine with it
-- `--disable-installed` is it needed? creates a distributable portable installation
+- Several compilation warnings show up during build: `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced [-Wcheri-capability-misuse]`
+- Toggling features and packages in configuration using `--with-something`, `--without-something` for packages and `--enable-something`, `--disable-something` for features
+  - `--disable-docs` disable documentation flag? It seems to build fine with it
+  - `--without-x` disable X11? It seems to build fine with it
+  - `--disable-installed` is it needed? creates a distributable portable installation
 
 ### Notes and links
 
