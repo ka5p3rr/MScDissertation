@@ -15,6 +15,7 @@
 - [ImageMagick](#imagemagick)
   - [Running instructions](#running-instructions)
   - [Issues](#issues)
+    - [Testing results](#testing-results)
   - [Notes and links](#notes-and-links)
 
 ## Compression
@@ -146,7 +147,24 @@ The tool can be optionally install the binaries with `gmake install` either to t
   - `--without-x` disable X11? It seems to build fine with it
   - `--disable-installed` is it needed? creates a distributable portable installation
 
+#### Testing results
+
+```
+============================================================================
+Testsuite summary for ImageMagick 7.1.0-44
+============================================================================
+# TOTAL: 86
+# PASS:  80
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  3
+# XPASS: 0
+# ERROR: 3
+```
+
+Some tests seem to be failing due to not being able to access fonts or other dependencies which are not included in the configuration.
+
 ### Notes and links
 
-- `env LD_LIBRARY_PATH=/path/to/ImageMagick/lib/directory:/path/to/ImageMagick/lib/some-other-directory:/usr/local/lib:/usr/lib:/lib /path/to/ImageMagick/executable`
+<!-- - `env LD_LIBRARY_PATH=/path/to/ImageMagick/lib/directory:/path/to/ImageMagick/lib/some-other-directory:/usr/local/lib:/usr/lib:/lib /path/to/ImageMagick/executable` -->
 - [ImageMagick](https://imagemagick.org/), [ImageMagick on GitHub](https://github.com/ImageMagick/ImageMagick)
