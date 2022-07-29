@@ -17,6 +17,7 @@
   - [Issues](#issues)
     - [Testing results](#testing-results)
   - [Notes and links](#notes-and-links)
+- [Miscellaneous porting](#miscellaneous-porting)
 
 ## Compression
 
@@ -168,3 +169,5 @@ Some tests seem to be failing due to not being able to access fonts or other dep
 
 <!-- - `env LD_LIBRARY_PATH=/path/to/ImageMagick/lib/directory:/path/to/ImageMagick/lib/some-other-directory:/usr/local/lib:/usr/lib:/lib /path/to/ImageMagick/executable` -->
 - [ImageMagick](https://imagemagick.org/), [ImageMagick on GitHub](https://github.com/ImageMagick/ImageMagick)
+
+## Miscellaneous porting
