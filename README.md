@@ -84,6 +84,27 @@ Ruize and I found the bug through different means, we updated each other on the 
 ### QuickLZ
 
 - Seems to cause a memory fault `In-address space security exception (core dumped)`
+- An investigation shows a cast of `(const unsigned char *)(size_t)` from a `const unsigned char *` type, which causes the store pointer to not be dereferencable. A pointer is cast to an integer type and than back to a pointer, which unde CHERI results in an invalid capability.
+
+```c
+typedef struct 
+{
+#if QLZ_COMPRESSION_LEVEL == 1
+ const unsigned char *offset;
+#else
+ const unsigned char *offset[QLZ_POINTERS];
+#endif
+} qlz_hash_decompress;
+```
+
+A decompression struct is created to contain an offset for compression tracking, which under `QLZ_COMPRESSION_LEVEL 1` is only ever of a pointer type. 
+
+```c
+offset2 = (const unsigned char *)(size_t)state->hash[hash].offset;
+```
+
+This offset is then cast and dereferenced in the code causing a capability fault at runtime. The cast is removed such that the offset can be stored as a dereferencable pointer.
+
 - [QuickLZ fork](https://github.com/ka5p3rr/QuickLZ)
 
 ### lzbench
