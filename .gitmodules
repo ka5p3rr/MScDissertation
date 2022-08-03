@@ -13,9 +13,6 @@
 [submodule "QuickLZ"]
 	path = QuickLZ
 	url = git@github.com:ka5p3rr/QuickLZ.git
-[submodule "liblzf"]
-	path = liblzf
-	url = git@github.com:ka5p3rr/liblzf.git
 [submodule "lzbench"]
 	path = lzbench
 	url = git@github.com:ka5p3rr/lzbench.git
