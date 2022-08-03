@@ -13,9 +13,6 @@
 [submodule "QuickLZ"]
 	path = QuickLZ
 	url = git@github.com:ka5p3rr/QuickLZ.git
-[submodule "ImageMagick"]
-	path = ImageMagick
-	url = git@github.com:ka5p3rr/ImageMagick.git
 [submodule "liblzf"]
 	path = liblzf
 	url = git@github.com:ka5p3rr/liblzf.git
