@@ -16,6 +16,7 @@
   - [liblzf](#liblzf)
 - [ImageMagick](#imagemagick)
   - [Running instructions](#running-instructions)
+  - [Porting](#porting)
   - [Issues](#issues)
     - [Testing results](#testing-results)
   - [Notes and links](#notes-and-links)
@@ -214,7 +215,7 @@ Now the tool can be run by:
 
 The tool can be optionally install the binaries with `gmake install` either to the default `/usr/local` or the `--prefix=` defined directory. Included tests can be run with `gmake check`. To remove all files produced by installation run `gmake uninstall`. In addition, `gmake clean` and `gmake distclean` are also available to remove files produced by compilation using `gmake` and running the `configure` script, respectively.
 
-### Issues
+### Porting
 
 - Several compilation warnings show up during build: `warning: cast from provenance-free integer type to pointer type will give pointer that can not be dereferenced [-Wcheri-capability-misuse]`
 - The issues appear in `MagickWand\wand.c` and `MagickCore\distribute-cache.c`.
@@ -251,6 +252,8 @@ The compiler warning aries from the fact that an integer type of `wand_id` varia
 As a result the ImageMagick developers created a solution, which does remove the warnings. A proposed solution uses a `NULL` pointer, which is incremented and passed as the function argument. Such solution has several problems, which are explained in more detail in the ImageMagick [discussion](https://github.com/ImageMagick/ImageMagick/discussions/5380).
 
 The ImageMagick codebase is constrained by keeping the API consistent, such as changes to update function signatures to use type
+
+### Issues
 
 - Toggling features and packages in configuration using `--with-something`, `--without-something` for packages and `--enable-something`, `--disable-something` for features
   - `--disable-docs` disable documentation flag? It seems to build fine with it
