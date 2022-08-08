@@ -247,11 +247,115 @@ WandExport size_t AcquireWandId(void)
 }
 ```
 
-The compiler warning aries from the fact that an integer type of `wand_id` variable is being cast to a `void *` pointer. As a result a pointer is created from an integer, which is not dereferencable. Capability tag is 0 and bounds cannot be set.
+The compiler warning aries from the fact that an integer type of `wand_id` variable is being cast to a `void *` pointer. As a result a pointer is created from an integer value, which is not dereferencable. Capability tag is 0 and bounds cannot be set. ImageMagick developers argue that it is permitted under the C standard and expect the `size_t` to be capable of holding a pointer. Such assumption does not always hold true. A great dicussion on this topic is provided [here](https://stackoverflow.com/questions/1464174/size-t-vs-uintptr-t).
+
+The `SplayTree` structure is designed to hold a wide variety of types including integers, strings, blobs, etc. The ImageMagick codebase is constrained by keeping the API consistent, for example changes to update function signatures to use the `uintptr_t` type is not viable.
 
 As a result the ImageMagick developers created a solution, which does remove the warnings. A proposed solution uses a `NULL` pointer, which is incremented and passed as the function argument. Such solution has several problems, which are explained in more detail in the ImageMagick [discussion](https://github.com/ImageMagick/ImageMagick/discussions/5380).
 
-The ImageMagick codebase is constrained by keeping the API consistent, such as changes to update function signatures to use type
+A first update to the ImageMagick code changes the `wand_id` to a pointer type as shown below:
+
+```c
+WandExport size_t AcquireWandId(void)
+{
+  size_t
+    id;
+
+  static size_t
+    *wand_id = NULL;
+
+  if (wand_semaphore == (SemaphoreInfo *) NULL)
+    ActivateSemaphoreInfo(&wand_semaphore);
+  LockSemaphoreInfo(wand_semaphore);
+if (wand_ids == (SplayTreeInfo*) NULL)
+    wand_ids=NewSplayTree((int (*)(const void*,const void *)) NULL,
+(void*(*)(void*)) NULL,(void *(*)(void *)) NULL);
+  wand_id++;
+id=(size_t) (wand_id-(size_t*) NULL);
+  (void) AddValueToSplayTree(wand_ids,wand_id,wand_id);
+  instantiate_wand=MagickTrue;
+  UnlockSemaphoreInfo(wand_semaphore);
+  return(id);
+}
+
+```
+
+This implementation has been very quickly changed to the solution below:
+
+```c
+WandExport size_t AcquireWandId(void)
+{
+  const size_t
+    *wand_id = (const size_t *) NULL;
+
+  size_t
+    id;
+
+  static size_t
+    isn = 0;
+
+  if (wand_semaphore == (SemaphoreInfo *) NULL)
+    ActivateSemaphoreInfo(&wand_semaphore);
+  LockSemaphoreInfo(wand_semaphore);
+  if (wand_ids == (SplayTreeInfo *) NULL)
+    wand_ids=NewSplayTree((int (*)(const void *,const void *)) NULL,
+      (void *(*)(void *)) NULL,(void *(*)(void *)) NULL);
+  id=isn++;
+  (void) AddValueToSplayTree(wand_ids,wand_id+id,wand_id+id);
+  instantiate_wand=MagickTrue;
+  UnlockSemaphoreInfo(wand_semaphore);
+  return(id);
+}
+```
+
+Semantically, it is pretty much the same implementation and exhibits similar issues.
+
+Firstly, the proposed solution of pointer arithmetic increases the `wand_id` pointer value by the size of the type being pointed to. Essentially, the ids are not incremented by 1 anymore. The operation of `wand_id+id` results in increments of 8 in my environment.
+
+Secondly, I think that the code can be fairly complicated to understand as the intention might not be clear to developers. This could potentially cause issues in future changes to the software. The value is created from a `NULL` pointer, which is then still treated as an integer. The definition of incrementing a `NULL` pointer doesn't seem to be well defined in the C language either. In fact, the `UndefinedBehaviorSanitizer` from LLVM says it's undefined behaviour.
+
+As a result a suggestion was proposed to use the `uintptr_t`. The usage of `uintptr_t`, which is an integer type designed to hold values that might be valid pointers if cast back to a pointer type (see 4.2.1 in [CHERI C/C++ Programming Guide](https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-947.pdf)). Such changes would show the intention of storing an integer value as a pointer.
+
+Some concern have been raised with the `uintptr_t` being optional part of the C11 standard (they prefer the c++ compiler, C++ as the better C).
+
+> An alternative solution would be to allocate the id, of type size_t, on the heap as that guarantees a proper pointer to secure in the splay-tree.
+
+A new solution taking the `uintptr_t` into account is shown below.
+
+```c
+WandExport size_t AcquireWandId(void)
+{
+  MagickAddressType
+    wand_id;
+
+  static size_t
+    id = 0;
+
+  if (wand_semaphore == (SemaphoreInfo *) NULL)
+    ActivateSemaphoreInfo(&wand_semaphore);
+  LockSemaphoreInfo(wand_semaphore);
+  if (wand_ids == (SplayTreeInfo *) NULL)
+    wand_ids=NewSplayTree((int (*)(const void *,const void *)) NULL,
+      (void *(*)(void *)) NULL,(void *(*)(void *)) NULL);
+  wand_id=id++;
+  (void) AddValueToSplayTree(wand_ids,(const void *) wand_id,(const void *)
+    wand_id);
+  instantiate_wand=MagickTrue;
+  UnlockSemaphoreInfo(wand_semaphore);
+  return((size_t) wand_id);
+}
+```
+
+The optionality of `uintptr_t` has been resolved with a macro below, which has already been part of the code-base previously.
+
+```c
+#if MAGICKCORE_HAVE_UINTPTR_T || defined(uintptr_t)
+typedef uintptr_t MagickAddressType;
+#else
+/* Hope for the best, I guess. */
+typedef size_t MagickAddressType;
+#endif
+```
 
 ### Issues
 
