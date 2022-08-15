@@ -13,15 +13,6 @@
 [submodule "QuickLZ"]
 	path = QuickLZ
 	url = git@github.com:ka5p3rr/QuickLZ.git
-[submodule "minilzo"]
-	path = minilzo
-	url = git@github.com:yuhaoth/minilzo.git
-[submodule "miniz"]
-	path = miniz
-	url = git@github.com:richgel999/miniz.git
 [submodule "ImageMagick"]
 	path = ImageMagick
 	url = git@github.com:ImageMagick/ImageMagick.git
-[submodule "lzbench"]
-	path = lzbench
-	url = git@github.com:inikep/lzbench.git
