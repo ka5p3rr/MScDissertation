@@ -155,6 +155,7 @@ typedef struct
 #else
  const unsigned char *offset[QLZ_POINTERS];
 #endif
+} qlz_hash_compress;
 ```
 
 As a result it can be either an integer or pointer type under `QLZ_COMPRESSION_LEVEL 1`. This can cause a similar danger to previous mentioned scenarios under decompression. The evaluation suggests that the capability is always correctly constructed. The `OFFSET_BASE` is created based on the source buffer for compression and when incremented with the offset from the struct a valid pointer is constructed. The result is then stored and and a chunk of the buffer is compressed. The updated value also uses the `OFFSET_BASE` and integer casting to appropriatly traverse it during the compression iteration.
