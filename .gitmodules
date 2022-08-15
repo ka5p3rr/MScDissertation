@@ -22,6 +22,3 @@
 [submodule "ImageMagick"]
 	path = ImageMagick
 	url = git@github.com:ImageMagick/ImageMagick.git
-[submodule "lzbench"]
-	path = lzbench
-	url = git@github.com:inikep/lzbench.git
