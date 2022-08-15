@@ -165,7 +165,7 @@ As a result it can be either an integer or pointer type under `QLZ_COMPRESSION_L
 
 - large compilation project pulling multiple compression libraries into one big repository
 - Abandoned for now
-- [lzbench](https://github.com/inikep/lzbench), [lzbench fork](https://github.com/ka5p3rr/lzbench)
+- [lzbench](https://github.com/inikep/lzbench)
 
 ### minilzo
 
